@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+import sys
 
 from MinecraftService import MinecraftService
 from Security import Security
@@ -57,4 +58,12 @@ def info():
 	return status, 200
 
 if(__name__ == '__main__'):
-	app.run(debug=True)
+
+	if(len(sys.argv) > 1):
+		if(sys.argv[1] == "generatetoken"):
+			Security.generateToken()
+			print("Token generated")
+		else:
+			print("Unknown argument")
+	else:
+		app.run(debug=True)
