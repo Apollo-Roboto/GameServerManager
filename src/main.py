@@ -15,10 +15,13 @@ def start():
 	auth = request.headers.get("authorisation")
 	print(auth)
 
-	minecraftService.start()
-	return {"msg":"Hello"}, 200
+	try:
+		minecraftService.start()
+		return {"msg":"Starting the server!"}, 200
+	except Exception:
+		return {"msg":"Error starting the server."}, 500
 
-@app.route("/minecraft/info", methods=["POST"])
+@app.route("/minecraft/info", methods=["GET"])
 def info():
 	
 	status = minecraftService.getStatus()

@@ -1,14 +1,19 @@
+from os import path
+
 from mcstatus import MinecraftServer
+
+from AppConfig import AppConfig
 
 
 class MinecraftService:
 
-	address = "74.58.53.48:25565"
-
 	_instance = None
 
 	def __init__(self):
-		pass
+		config = AppConfig.getInstance()
+		self.address = "74.58.53.48:25565"
+		self.serverPath = "/tmp/server"
+		self.startFile = "start.sh"
 
 	@classmethod
 	def getInstance(cls):
@@ -26,4 +31,9 @@ class MinecraftService:
 		return status.raw
 
 	def start(self):
+
+		status = self.getStatus()
+		if(status != None):
+			raise Exception("Sever already running.")
+
 		pass
