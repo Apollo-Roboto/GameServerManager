@@ -1,5 +1,4 @@
 {
-	"address": "74.58.53.48:25565",
-	"serverPath": "/tmp/server",
-	"startFile": "start.sh"
+	"serverAddress": "74.58.53.48:25564",
+	"serverCommand": "/tmp/start.sh"
 }

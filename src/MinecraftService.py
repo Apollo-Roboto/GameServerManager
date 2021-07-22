@@ -1,9 +1,13 @@
 from os import path
+import os
+import logging
+from flask import config
 
 from mcstatus import MinecraftServer
 
 from AppConfig import AppConfig
 
+logger = logging.getLogger(__name__)
 
 class MinecraftService:
 
@@ -11,9 +15,9 @@ class MinecraftService:
 
 	def __init__(self):
 		config = AppConfig.getInstance()
-		self.address = "74.58.53.48:25565"
-		self.serverPath = "/tmp/server"
-		self.startFile = "start.sh"
+		
+		self.address = config.serverAddress
+		self.serverComand = config.serverCommand
 
 	@classmethod
 	def getInstance(cls):
@@ -36,4 +40,9 @@ class MinecraftService:
 		if(status != None):
 			raise Exception("Sever already running.")
 
-		pass
+		self._runServer()
+
+	def _runServer(self):
+		logger.info("This is where I would start the server, if I was properly setup!")
+		logger.info("command: " + self.serverComand)
+		# os.system(cmd)
