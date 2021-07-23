@@ -1,3 +1,8 @@
+from gevent import monkey
+monkey.patch_all()
+from gevent.pywsgi import WSGIServer
+from flask_compress import Compress
+
 from flask import Flask, jsonify, request
 import sys
 
@@ -6,6 +11,8 @@ from Security import Security
 from AppConfig import AppConfig
 
 app = Flask(__name__)
+compress = Compress()
+compress.init_app(app)
 
 minecraftService = MinecraftService.getInstance()
 
@@ -65,8 +72,12 @@ if(__name__ == '__main__'):
 		else:
 			print("Unknown argument")
 	else:
-		app.run(
-			debug=True,
-			host="0.0.0.0",
-			port=AppConfig.getInstance().port
-		)
+		print("Starting server")
+		http_server = WSGIServer(("0.0.0.0", AppConfig.getInstance().port), app)
+		http_server.serve_forever()
+
+		# app.run(
+		# 	debug=True,
+		# 	host="0.0.0.0",
+		# 	port=AppConfig.getInstance().port
+		# )
