@@ -1,7 +1,8 @@
 from os import path
 import os
 import logging
-from flask import config
+import subprocess
+from time import sleep
 
 from mcstatus import MinecraftServer
 
@@ -43,6 +44,8 @@ class MinecraftService:
 		self._runServer()
 
 	def _runServer(self):
-		logger.info("This is where I would start the server, if I was properly setup!")
-		logger.info("command: " + self.serverComand)
-		# os.system(cmd)
+		subprocess.Popen(self.serverComand.split(),
+			shell=True,
+			stdout=subprocess.DEVNULL,
+			stderr=subprocess.DEVNULL
+		)

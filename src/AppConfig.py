@@ -37,7 +37,6 @@ class AppConfig:
 				logger.error("Loading configurations failed")
 				raise e
 
-
 	@property
 	def serverAddress(self):
 		return self._config["serverAddress"]

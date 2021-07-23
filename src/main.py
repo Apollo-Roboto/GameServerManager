@@ -16,7 +16,6 @@ def ping():
 def start():
 
 	auth = request.headers.get("Authorization")
-
 	valid = Security.validateToken(auth)
 
 	if(not valid):
@@ -41,7 +40,6 @@ def start():
 def info():
 
 	auth = request.headers.get("Authorization")
-
 	valid = Security.validateToken(auth)
 
 	if(not valid):
