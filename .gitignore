@@ -1,4 +1,9 @@
 # python
 __pycache__/
 
+# token validation
 token
+
+# ssl certificates
+cert.pem
+key.pem
