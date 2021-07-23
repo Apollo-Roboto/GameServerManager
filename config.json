@@ -1,4 +1,5 @@
 {
 	"serverAddress": "74.58.53.48:25565",
+	"port": 25575,
 	"serverCommand": "echo hello"
 }

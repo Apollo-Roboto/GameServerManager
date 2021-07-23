@@ -3,6 +3,7 @@ import sys
 
 from MinecraftService import MinecraftService
 from Security import Security
+from AppConfig import AppConfig
 
 app = Flask(__name__)
 
@@ -10,7 +11,7 @@ minecraftService = MinecraftService.getInstance()
 
 @app.route("/minecraft/ping", methods=["GET"])
 def ping():
-	return {"msg":"Hello"}, 200
+	return {"message":"Pong"}, 200
 
 @app.route("/minecraft/start", methods=["POST"])
 def start():
@@ -66,5 +67,6 @@ if(__name__ == '__main__'):
 	else:
 		app.run(
 			debug=True,
-			ssl_context=('cert.pem', 'key.pem')
+			host="0.0.0.0",
+			port=AppConfig.getInstance().port
 		)

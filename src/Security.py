@@ -12,6 +12,9 @@ class Security:
 	@classmethod
 	def validateToken(cls, tokenToCheck):
 
+		if(tokenToCheck == None):
+			raise Exception("token cannot be None")
+		
 		tokenToCheck = tokenToCheck.removeprefix("Bearer ")
 
 		token = None
