@@ -1,5 +1,6 @@
 {
-	"serverAddress": "74.58.53.48:25565",
+	"serverAddress": "localhost:25565",
 	"port": 25575,
+	"serverPath": "/path/to/server/",
 	"serverCommand": "echo hello"
 }

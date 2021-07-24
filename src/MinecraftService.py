@@ -19,6 +19,7 @@ class MinecraftService:
 		
 		self.address = config.serverAddress
 		self.serverComand = config.serverCommand
+		self.serverPath = config.serverPath
 
 	@classmethod
 	def getInstance(cls):
@@ -47,5 +48,6 @@ class MinecraftService:
 		subprocess.Popen(self.serverComand.split(),
 			shell=True,
 			stdout=subprocess.DEVNULL,
-			stderr=subprocess.DEVNULL
+			stderr=subprocess.DEVNULL,
+			cwd=self.serverPath
 		)
