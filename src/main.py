@@ -6,7 +6,7 @@ from flask_compress import Compress
 from flask import Flask, jsonify, request
 import sys
 
-from MinecraftService import MinecraftService
+from MinecraftService import MinecraftService, AlreadyRunningException, TooSoonException
 from Security import Security
 from AppConfig import AppConfig
 
@@ -37,7 +37,11 @@ def start():
 		return {
 			"message":"Starting the server."
 			}, 200
-
+	except (AlreadyRunningException, TooSoonException) as e:
+		return {
+			"error":"Error starting the server.",
+			"detail": str(e)
+			}, 400
 	except Exception as e:
 		return {
 			"error":"Error starting the server.",

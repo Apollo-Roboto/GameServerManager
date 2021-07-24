@@ -46,5 +46,9 @@ class AppConfig:
 		return self._config["serverCommand"]
 
 	@property
+	def serverPath(self):
+		return self._config["serverPath"]
+
+	@property
 	def port(self):
 		return self._config["port"]
