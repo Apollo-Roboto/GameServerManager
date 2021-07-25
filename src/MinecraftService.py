@@ -1,49 +1,13 @@
 from datetime import datetime, timedelta
-from os import path
-import os
 import subprocess
 import logging
-from multiprocessing import Process
 from time import sleep
 
 from mcstatus import MinecraftServer
 
 from AppConfig import AppConfig
-import Utils
 
 logger = logging.getLogger(__name__)
-
-# def detachify(func):
-# 	"""Decorate a function so that its calls are async in a detached process.
-
-# 	Usage
-# 	-----
-
-# 	.. code::
-# 			import time
-
-# 			@detachify
-# 			def f(message):
-# 				time.sleep(5)
-# 				print(message)
-
-# 			f('Async and detached!!!')
-
-# 	"""
-# 	# create a process fork and run the function
-# 	def forkify(*args, **kwargs):
-# 		if os.fork() != 0:
-# 			return
-# 		func(*args, **kwargs)
-
-# 	# wrapper to run the forkified function
-# 	def wrapper(*args, **kwargs):
-# 		proc = Process(target=lambda: forkify(*args, **kwargs))
-# 		proc.start()
-# 		proc.join()
-# 		return
-
-# 	return wrapper
 
 config = AppConfig.getInstance()
 
@@ -59,6 +23,8 @@ class MinecraftService:
 		# 2 minutes cooldown, to prevent starting the server twice
 		self.cooldown = 2
 		self._nextRetry = datetime.now()
+
+		self._serverProcess = None
 
 	@classmethod
 	def getInstance(cls):
@@ -77,7 +43,15 @@ class MinecraftService:
 		return status.raw
 
 	def isRunning(self):
-		return Utils.isPortUsed(config.minecraftServerPort)
+		if(self._serverProcess == None):
+			return False
+
+		# check if process has terminated
+		poll = self._serverProcess.poll()
+		if(poll == None):
+			return True
+		else:
+			return False
 
 	def start(self):
 		if(datetime.now() < self._nextRetry):
@@ -93,11 +67,11 @@ class MinecraftService:
 		
 		self._runServer()
 
-	# @detachify
 	def _runServer(self):
-		subprocess.Popen(config.minecraftServerCommand.split(),
+		self._serverProcess = subprocess.Popen(
+			config.minecraftServerCommand.split(),
 			shell=True,
+			cwd=config.minecraftServerPath,
 			# stdout=subprocess.DEVNULL,
 			# stderr=subprocess.DEVNULL,
-			cwd=config.minecraftServerPath
 		)
