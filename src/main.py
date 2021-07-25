@@ -1,3 +1,4 @@
+import logging
 from gevent import monkey
 monkey.patch_all()
 from gevent.pywsgi import WSGIServer
@@ -6,7 +7,7 @@ from flask_compress import Compress
 from flask import Flask, jsonify, request
 import sys
 
-from MinecraftService import MinecraftService, AlreadyRunningException, TooSoonException
+from MinecraftService import MinecraftService, AlreadyRunningException, CooldownException
 from Security import Security
 from AppConfig import AppConfig
 
@@ -15,14 +16,15 @@ compress = Compress()
 compress.init_app(app)
 
 minecraftService = MinecraftService.getInstance()
+config = AppConfig.getInstance()
 
 @app.route("/minecraft/ping", methods=["GET"])
 def ping():
+	print("Ping")
 	return {"message":"Pong"}, 200
 
 @app.route("/minecraft/start", methods=["POST"])
 def start():
-
 	auth = request.headers.get("Authorization")
 	valid = Security.validateToken(auth)
 
@@ -32,12 +34,14 @@ def start():
 			"detail": None
 			}, 401
 
+	print("Request to start")
+
 	try:
 		minecraftService.start()
 		return {
 			"message":"Starting the server."
 			}, 200
-	except (AlreadyRunningException, TooSoonException) as e:
+	except (AlreadyRunningException, CooldownException) as e:
 		return {
 			"error":"Error starting the server.",
 			"detail": str(e)
@@ -77,11 +81,11 @@ if(__name__ == '__main__'):
 			print("Unknown argument")
 	else:
 		print("Starting server")
-		http_server = WSGIServer(("0.0.0.0", AppConfig.getInstance().port), app)
+		http_server = WSGIServer((config.flaskHost, config.flaskPort), app, log="info")
 		http_server.serve_forever()
 
 		# app.run(
 		# 	debug=True,
-		# 	host="0.0.0.0",
-		# 	port=AppConfig.getInstance().port
+		# 	host=config.flaskHost,
+		# 	port=config.flaskPort
 		# )

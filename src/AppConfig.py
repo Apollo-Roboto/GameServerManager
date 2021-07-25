@@ -32,23 +32,12 @@ class AppConfig:
 			try:
 				jsonObj = json.load(f)
 				self._config = jsonObj
+				self._setProperties(self._config)
 				logger.info("Loading configurations done")
 			except Exception as e:
 				logger.error("Loading configurations failed")
 				raise e
 
-	@property
-	def serverAddress(self):
-		return self._config["serverAddress"]
-
-	@property
-	def serverCommand(self):
-		return self._config["serverCommand"]
-
-	@property
-	def serverPath(self):
-		return self._config["serverPath"]
-
-	@property
-	def port(self):
-		return self._config["port"]
+	def _setProperties(self, properties: dict):
+		for key, val in properties.items():
+			setattr(self, key, val)
