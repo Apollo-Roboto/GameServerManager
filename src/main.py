@@ -25,6 +25,13 @@ logger = logging.getLogger(__name__)
 minecraftService = MinecraftService.getInstance()
 config = AppConfig.getInstance()
 
+def errorWrapper(e: Exception, msg=None):
+	return {
+		"type": e.__class__.__name__,
+		"detail": str(e),
+		"error": msg
+	}
+
 @app.route("/minecraft/ping", methods=["GET"])
 def ping():
 	logger.info("ping")
@@ -37,6 +44,7 @@ def start():
 
 	if(not valid):
 		return {
+			"type": "InvalidToken",
 			"error": "Invalid token",
 			"detail": None
 			}, 401
@@ -45,19 +53,12 @@ def start():
 
 	try:
 		minecraftService.start()
-		return {
-			"message":"Starting the server."
-			}, 200
+		return {"message":"Starting the server."}, 200
+
 	except (AlreadyRunningException, CooldownException) as e:
-		return {
-			"error":"Error starting the server.",
-			"detail": str(e)
-			}, 400
+		return errorWrapper(e, "Error starting the server."), 400
 	except Exception as e:
-		return {
-			"error":"Error starting the server.",
-			"detail": str(e)
-			}, 500
+		return errorWrapper(e, "Error starting the server."), 500
 
 @app.route("/minecraft/info", methods=["GET"])
 def info():
@@ -67,6 +68,7 @@ def info():
 
 	if(not valid):
 		return {
+			"type": "InvalidToken",
 			"error": "Invalid token",
 			"detail": None
 			}, 401
@@ -74,7 +76,7 @@ def info():
 	status = minecraftService.getStatus()
 
 	if(status is None):
-		return {"status": "offline"}, 200
+		return {"status": "offline"}, 503
 	
 	return status, 200
 
