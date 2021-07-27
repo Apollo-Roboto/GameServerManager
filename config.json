@@ -1,7 +1,7 @@
 {
 	"minecraftServerHost": "localhost",
 	"minecraftServerPort": "25565",
-	"minecraftServerPath": "/path/to/server/",
+	"minecraftServerPath": ".",
 	"minecraftServerCommand": "echo hello",
 	"flaskPort": 25575,
 	"flaskHost": "0.0.0.0"

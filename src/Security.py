@@ -1,4 +1,10 @@
 import secrets
+import logging
+import sys
+
+handler = logging.StreamHandler(sys.stdout)
+logging.basicConfig(level=logging.INFO, handlers=[handler])
+logger = logging.getLogger(__name__)
 
 class Security:
 	pass

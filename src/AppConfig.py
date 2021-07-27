@@ -1,7 +1,10 @@
 import os
+import sys
 import logging
 import json
 
+handler = logging.StreamHandler(sys.stdout)
+logging.basicConfig(level=logging.INFO, handlers=[handler])
 logger = logging.getLogger(__name__)
 
 class AppConfig:
@@ -32,12 +35,10 @@ class AppConfig:
 			try:
 				jsonObj = json.load(f)
 				self._config = jsonObj
-				self._setProperties(self._config)
 				logger.info("Loading configurations done")
 			except Exception as e:
 				logger.error("Loading configurations failed")
 				raise e
 
-	def _setProperties(self, properties: dict):
-		for key, val in properties.items():
-			setattr(self, key, val)
+	def __getattr__(self, name: str):
+		return self._config[name]

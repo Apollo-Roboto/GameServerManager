@@ -9,7 +9,7 @@ from flask_compress import Compress
 from flask import Flask, jsonify, request
 from flask.logging import default_handler
 
-from MinecraftService import MinecraftService, AlreadyRunningException, CooldownException
+from MinecraftService import MinecraftService, AlreadyRunningException
 from Security import Security
 from AppConfig import AppConfig
 
@@ -55,7 +55,7 @@ def start():
 		minecraftService.start()
 		return {"message":"Starting the server."}, 200
 
-	except (AlreadyRunningException, CooldownException) as e:
+	except AlreadyRunningException as e:
 		return errorWrapper(e, "Error starting the server."), 400
 	except Exception as e:
 		return errorWrapper(e, "Error starting the server."), 500
@@ -89,8 +89,9 @@ if(__name__ == '__main__'):
 		else:
 			logger.info("Unknown argument")
 	else:
-		logger.info("Starting flask server")
+		logger.info("Starting flask server...")
 		http_server = WSGIServer((config.flaskHost, config.flaskPort), app)
+		logger.info(f"Listening on {config.flaskHost}:{config.flaskPort}")
 		http_server.serve_forever()
 
 		# app.run(

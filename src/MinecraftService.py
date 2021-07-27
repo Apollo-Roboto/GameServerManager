@@ -1,28 +1,25 @@
 from datetime import datetime, timedelta
 import subprocess
 import logging
-from time import sleep
+import sys
 
 from mcstatus import MinecraftServer
 
 from AppConfig import AppConfig
 
+handler = logging.StreamHandler(sys.stdout)
+logging.basicConfig(level=logging.INFO, handlers=[handler])
 logger = logging.getLogger(__name__)
 
 config = AppConfig.getInstance()
 
 class AlreadyRunningException(Exception): pass
-class CooldownException(Exception): pass
 
 class MinecraftService:
 
 	_instance = None
 
 	def __init__(self):
-		
-		# 2 minutes cooldown, to prevent starting the server twice
-		self.cooldown = 2
-		self._nextRetry = datetime.now()
 
 		self._serverProcess = None
 
@@ -54,16 +51,10 @@ class MinecraftService:
 			return False
 
 	def start(self):
-		if(datetime.now() < self._nextRetry):
-			raise CooldownException("Wait for cooldown before trying to start again.")
-
 		if(self.isRunning()):
 			raise AlreadyRunningException("Sever already running.")
 
-		logger.info("Starting the minecraft server")
-
-		# set the countdown
-		self._nextRetry = datetime.now() + timedelta(minutes=self.cooldown)
+		logger.info("Starting the minecraft server...")
 		
 		self._runServer()
 
