@@ -60,7 +60,7 @@ class MinecraftService:
 		if(self.isRunning()):
 			raise AlreadyRunningException("Sever already running.")
 
-		print("Starting the server")
+		logger.info("Starting the minecraft server")
 
 		# set the countdown
 		self._nextRetry = datetime.now() + timedelta(minutes=self.cooldown)

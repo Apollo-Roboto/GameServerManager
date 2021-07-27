@@ -1,26 +1,33 @@
-import logging
 from gevent import monkey
 monkey.patch_all()
 from gevent.pywsgi import WSGIServer
-from flask_compress import Compress
 
-from flask import Flask, jsonify, request
+import logging
 import sys
+
+from flask_compress import Compress
+from flask import Flask, jsonify, request
+from flask.logging import default_handler
 
 from MinecraftService import MinecraftService, AlreadyRunningException, CooldownException
 from Security import Security
 from AppConfig import AppConfig
 
 app = Flask(__name__)
+app.logger.removeHandler(default_handler)
 compress = Compress()
 compress.init_app(app)
+
+handler = logging.StreamHandler(sys.stdout)
+logging.basicConfig(level=logging.INFO, handlers=[handler])
+logger = logging.getLogger(__name__)
 
 minecraftService = MinecraftService.getInstance()
 config = AppConfig.getInstance()
 
 @app.route("/minecraft/ping", methods=["GET"])
 def ping():
-	print("Ping")
+	logger.info("ping")
 	return {"message":"Pong"}, 200
 
 @app.route("/minecraft/start", methods=["POST"])
@@ -34,7 +41,7 @@ def start():
 			"detail": None
 			}, 401
 
-	print("Request to start")
+	logger.info("Request to start")
 
 	try:
 		minecraftService.start()
@@ -76,12 +83,12 @@ if(__name__ == '__main__'):
 	if(len(sys.argv) > 1):
 		if(sys.argv[1] == "generatetoken"):
 			Security.generateToken()
-			print("Token generated")
+			logger.info("Token generated")
 		else:
-			print("Unknown argument")
+			logger.info("Unknown argument")
 	else:
-		print("Starting server")
-		http_server = WSGIServer((config.flaskHost, config.flaskPort), app, log="info")
+		logger.info("Starting flask server")
+		http_server = WSGIServer((config.flaskHost, config.flaskPort), app)
 		http_server.serve_forever()
 
 		# app.run(
