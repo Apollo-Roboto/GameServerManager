@@ -7,12 +7,11 @@ logging.basicConfig(level=logging.INFO, handlers=[handler])
 logger = logging.getLogger(__name__)
 
 class Security:
-	pass
 
 	@classmethod
 	def generateToken(cls):
 		token = secrets.token_urlsafe(32)
-		with open("./token", "w") as f:
+		with open("./token", "w", encoding="utf-8") as f:
 			f.write(token)
 
 	@classmethod
@@ -24,7 +23,7 @@ class Security:
 		tokenToCheck = tokenToCheck.removeprefix("Bearer ")
 
 		token = None
-		with open("./token", "r") as f:
+		with open("./token", "r", encoding="utf-8") as f:
 			token = f.read()
 
 		if(token is None):

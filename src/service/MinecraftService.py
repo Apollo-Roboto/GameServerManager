@@ -5,7 +5,7 @@ import sys
 
 from mcstatus import MinecraftServer
 
-from AppConfig import AppConfig
+from core import AppConfig
 
 handler = logging.StreamHandler(sys.stdout)
 logging.basicConfig(level=logging.INFO, handlers=[handler])
