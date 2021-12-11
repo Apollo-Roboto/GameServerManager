@@ -1,8 +1,49 @@
 {
+	"$schema": "./schemas/configSchema.json",
 	"minecraftServerHost": "localhost",
 	"minecraftServerPort": "25565",
 	"minecraftServerPath": ".",
 	"minecraftServerCommand": "echo hello",
+	
 	"flaskPort": 25575,
-	"flaskHost": "0.0.0.0"
+	"flaskHost": "0.0.0.0",
+	"flaskDebug": true,
+	"timeUp": 21600,
+	"games": {
+		"Minecraft": {
+			"default": "1.16.5",
+			"versions": {
+				"1.16.5":{
+					"path": "~/Minecraft/1.16.5/path",
+					"command": "./start",
+					"readyLog": "\\[.+\\] \\[Server thread/INFO\\]: Done \\(.+\\)! For help, type \"help\"",
+					"timeout": 360
+				},
+				"1.18.0":{
+					"path": "~/Minecraft/1.18.0/path",
+					"command": "./start",
+					"readyLog": "\\[.+\\] [Server thread/INFO]: Done \\(.+\\)! For help, type \"help\"",
+					"timeout": 360
+				}
+			}
+		},
+		"Satisfactory": {
+			"path": "~/Satisfactory/path",
+			"command": "./start",
+			"readyLog": "\\[.*\\]\\[  0\\]LogInit: Display: Engine is initialized. Leaving FEngineLoop::Init\\(\\)",
+			"timeout": 360
+		},
+		"Drawpile": {
+			"path": "~/Drawpile/path",
+			"command": "./start",
+			"readyLog": "Server is ready",
+			"timeout": 360
+		},
+		"Testenin": {
+			"path": "C:\\Users\\Pigeon\\Repositories\\REST-Minecraft-Starter\\",
+			"command": "python test_utility.py",
+			"readyLog": "\\[.*\\] : Server is ready to serve !!!",
+			"timeout": 360
+		}
+	}
 }

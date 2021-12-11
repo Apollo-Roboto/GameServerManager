@@ -1,0 +1,144 @@
+# https://www.devopslifecycle.com/lessons/2/sending-webhooks-with-python
+
+openapi: 3.0.0
+
+servers:
+  - url: localhost
+    description: Local tests
+  - url: mc.apollo-roboto.dev
+    description: Actual hosting server
+
+info:
+  title: REST Game Server starter
+  version: 1.0.0
+
+paths:
+
+  /server/{game}/start:
+    parameters:
+      - name: game
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: Callback-Url
+        in: header
+        required: false
+        schema:
+          type: string
+          format: uri
+
+    post:
+      responses:
+        200:
+          description: Request to start recieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestReceived"
+
+        400:
+          $ref: "#components/responses/BadRequest"
+
+        401:
+          $ref: "#components/responses/Unauthorized"
+
+      callbacks:
+        ServerStarted:
+          "{$request.header#/callbackUrl}":
+            post:
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/RequestResult"
+
+              responses:
+                "200":
+                  description: Your server returns this code if it accepts the callback
+
+  /server/{game}/stop:
+    parameters:
+      - name: game
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Callback-Url
+        in: header
+        required: false
+        schema:
+          type: string
+          format: uri
+
+    post:
+      responses:
+        200:
+          description: Request to stop recieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestReceived"
+
+        400:
+          $ref: "#components/responses/BadRequest"
+
+        401:
+          $ref: "#components/responses/Unauthorized"
+
+components:
+
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    RequestReceived:
+      type: object
+      properties:
+        message:
+          type: string
+        state:
+          type: string
+          enum:
+            - Starting
+            - Running
+        timeout:
+          type: string
+
+    RequestResult:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+          enum:
+            - failed
+            - sucess
+        details:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        details:
+          type: string
