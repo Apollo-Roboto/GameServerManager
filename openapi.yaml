@@ -62,13 +62,8 @@ paths:
                 "200":
                   description: Your server returns this code if it accepts the callback
 
-  /server/{game}/stop:
+  /server/stop:
     parameters:
-      - name: game
-        in: path
-        required: true
-        schema:
-          type: string
       - name: Callback-Url
         in: header
         required: false
