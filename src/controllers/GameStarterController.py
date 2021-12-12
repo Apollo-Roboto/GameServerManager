@@ -112,4 +112,18 @@ def stop(game):
 
 @app.route("/servers", methods=["GET"])
 def list_servers():
-	return {"msg": "please do the code thing"}, 501
+	new_dict = {}
+
+	# get the games
+	for game_name, game_data in config.games.items():
+
+		new_dict[game_name] = {}
+
+		if("versions" in game_data):
+			versions = game_data["versions"].keys()
+			new_dict[game_name]["versions"] = list(versions)
+
+		if("default" in game_data):
+			new_dict[game_name]["default"] = game_data["default"]
+
+	return new_dict, 200

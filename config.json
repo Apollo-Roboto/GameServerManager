@@ -44,6 +44,16 @@
 			"command": "python test_utility.py",
 			"readyLog": "\\[.*\\] : Server is ready to serve !!!",
 			"timeout": 360
+		},
+		"TesteninVer": {
+			"versions":{
+				"1":{
+					"path": "C:\\Users\\Pigeon\\Repositories\\REST-Minecraft-Starter\\",
+					"command": "python test_utility.py",
+					"readyLog": "\\[.*\\] : Server is ready to serve !!!",
+					"timeout": 360
+				}
+			}
 		}
 	}
 }
