@@ -17,6 +17,7 @@ config = AppConfig.getInstance()
 
 
 class AlreadyRunningException(Exception): pass
+class NotRunningException(Exception): pass
 
 
 
@@ -62,6 +63,12 @@ class ServerService:
 			self._thread.on_ready_events.append(ServerService._on_ready_factory(callback_url))
 			self._thread.on_exit_events.append(ServerService._on_exit_factory(callback_url))
 		self._thread.start()
+
+	def stop(self):
+		if(not self.is_running()):
+			raise NotRunningException()
+		
+		self._thread.stop()
 
 	def _on_ready_factory(callback_url):
 		"""Factory so I can create a function with the callBack more easily"""

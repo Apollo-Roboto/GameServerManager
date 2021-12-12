@@ -1,4 +1,5 @@
 import subprocess
+import signal
 import logging
 import re
 from threading import Thread
@@ -40,6 +41,9 @@ class ProcessHandler(Thread):
 		self.proc.wait()
 		logger.info(f"Process done with exit code {self.proc.poll()}")
 		self._on_exit()
+
+	def stop(self):
+		self.proc.send_signal(signal.SIGTERM)
 
 	def _on_ready(self):
 		logger.info("Calling on_ready_events")

@@ -1,5 +1,5 @@
 {
-	"$schema": "./schemas/configSchema.json",
+	"$schema": "./schemas/ConfigSchema.json",
 	"minecraftServerHost": "localhost",
 	"minecraftServerPort": "25565",
 	"minecraftServerPath": ".",

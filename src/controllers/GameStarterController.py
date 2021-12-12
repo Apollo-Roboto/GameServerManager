@@ -1,5 +1,4 @@
 import logging
-from os import error
 import sys
 import validators
 
@@ -10,7 +9,7 @@ from flask.logging import default_handler
 # from service.MinecraftService import MinecraftService, AlreadyRunningException
 from core import AppConfig, Security
 from model import RequestReceived, Error, Status, Game
-from service import ServerService, AlreadyRunningException
+from service import ServerService, AlreadyRunningException, NotRunningException
 
 app = Flask(__name__)
 app.logger.removeHandler(default_handler)
@@ -26,6 +25,8 @@ serverService = ServerService.getInstance()
 
 @app.route("/webhook", methods=["POST"])
 def webhooktest():
+	logger.info("########################### W E B H O O K ###########################")
+	logger.info(request.data)
 	return {"msg":"received"}, 200
 
 @app.route("/server/ping", methods=["GET"])
@@ -83,7 +84,7 @@ def start(game):
 	).to_dict(), 200
 
 @app.route("/server/<game>/stop", methods=["POST"])
-def info(game):
+def stop(game):
 	auth = request.headers.get("Authorization")
 	valid = Security.validateToken(auth)
 
@@ -93,10 +94,22 @@ def info(game):
 			details="Provided token was invalid",
 		).to_dict(), 401
 
-	logger.info(f"Request to stop {game}")
+	logger.info(f"Request to stop {game}...")
+
+	try:
+		serverService.stop()
+	except NotRunningException as e:
+		return Error(
+			message="Bad request",
+			details="No game is running",
+		).to_dict(), 400
 
 	return RequestReceived(
 		message=f"Stopping {game}",
 		status=Status.RUNNING,
-		details=None,
+		timeout=None,
 	).to_dict(), 200
+
+@app.route("/servers", methods=["GET"])
+def list_servers():
+	return {"msg": "please do the code thing"}, 501
