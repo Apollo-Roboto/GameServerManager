@@ -60,6 +60,7 @@ class ServerService:
 		if(callback_url is not None):
 			self._thread.on_ready_events.append(ServerService._on_ready_factory(callback_url))
 			self._thread.on_exit_events.append(ServerService._on_exit_factory(callback_url))
+			self._thread.on_reminder_events.append(ServerService._on_reminder_factory(callback_url))
 		self._thread.start()
 
 	def stop(self):
@@ -73,6 +74,29 @@ class ServerService:
 			self._thread.reset_timeout()
 		else:
 			logger.info("Tried to reset timeout but no thread was running.")
+	
+	def _on_reminder_factory(callback_url):
+		"""Factory so I can create a function with the callBack more easily"""
+		def on_reminder(timeLeft):
+			logger.info(f"Reminder, calling '{callback_url}'")
+			result = RequestResult(
+				message=f"Reminder, the server will stop in {timeLeft} seconds.",
+				status=Status.RUNNING,
+				details=None
+			)
+
+			def do_the_callback():
+				try:
+					response = requests.post(callback_url, json=result.to_dict())
+					if(response.status_code == 200):
+						logger.info(f"Successfully called {callback_url}.")
+					else:
+						logger.info(f"Failed to call {callback_url}. Received {response.status_code}.")
+				except requests.exceptions.ConnectionError as e:
+					logger.info(f"Connection error with {callback_url}. {e}")
+			
+			Thread(target=do_the_callback).start()
+		return on_reminder
 
 	def _on_ready_factory(callback_url):
 		"""Factory so I can create a function with the callBack more easily"""

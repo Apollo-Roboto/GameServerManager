@@ -8,7 +8,8 @@
 	"flaskPort": 25575,
 	"flaskHost": "0.0.0.0",
 	"flaskDebug": true,
-	"autoStop": 21600,
+	"autoStop": 30,
+	"reminderTime": 15,
 	"games": {
 		"Minecraft": {
 			"default": "1.16.5",
