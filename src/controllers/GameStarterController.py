@@ -34,6 +34,11 @@ def ping():
 	logger.info("ping")
 	return {"msg":"🤖"}, 200
 
+@app.route("/server/resetTimeout", methods=["POST"])
+def reset_timeout():
+	serverService.reset_timeout()
+	return {"resetTimeout":"resetTimeout"}, 200
+
 @app.route("/server/<game>/start", methods=["POST"])
 def start(game):
 	auth = request.headers.get("Authorization")

@@ -1,7 +1,5 @@
 import logging
 import sys
-import subprocess
-import re
 import requests
 from threading import Thread
 
@@ -69,6 +67,12 @@ class ServerService:
 			raise NotRunningException()
 		
 		self._thread.stop()
+
+	def reset_timeout(self):
+		if(self.is_running()):
+			self._thread.reset_timeout()
+		else:
+			logger.info("Tried to reset timeout but no thread was running.")
 
 	def _on_ready_factory(callback_url):
 		"""Factory so I can create a function with the callBack more easily"""
