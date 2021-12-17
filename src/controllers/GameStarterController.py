@@ -88,8 +88,8 @@ def start(game):
 		timeout=game.timeout,
 	).to_dict(), 200
 
-@app.route("/server/<game>/stop", methods=["POST"])
-def stop(game):
+@app.route("/server/stop", methods=["POST"])
+def stop():
 	auth = request.headers.get("Authorization")
 	valid = Security.validateToken(auth)
 
@@ -99,7 +99,7 @@ def stop(game):
 			details="Provided token was invalid",
 		).to_dict(), 401
 
-	logger.info(f"Request to stop {game}...")
+	logger.info(f"Request to stop...")
 
 	try:
 		serverService.stop()
@@ -110,7 +110,7 @@ def stop(game):
 		).to_dict(), 400
 
 	return RequestReceived(
-		message=f"Stopping {game}",
+		message=f"Stopping",
 		status=Status.RUNNING,
 		timeout=None,
 	).to_dict(), 200
