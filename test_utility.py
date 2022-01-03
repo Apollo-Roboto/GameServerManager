@@ -10,7 +10,7 @@ def log(s):
 	print(f"[{datetime.now().isoformat()}] : {s}")
 	sys.stdout.flush()
 
-for _ in range(5):
+for _ in range(50):
 	log(f"Preparing something ({_})")
 	delay()
 

@@ -6,7 +6,6 @@ from flask_compress import Compress
 from flask import Flask, json, jsonify, request
 from flask.logging import default_handler
 
-# from service.MinecraftService import MinecraftService, AlreadyRunningException
 from core import AppConfig, Security
 from model import RequestReceived, Error, Status, Game
 from service import ServerService, AlreadyRunningException, NotRunningException
@@ -36,7 +35,17 @@ def ping():
 
 @app.route("/server/resetTimeout", methods=["POST"])
 def reset_timeout():
+	auth = request.headers.get("Authorization")
+	valid = Security.validateToken(auth)
+
+	if(not valid):
+		return Error(
+			message="Unauthorized",
+			details="Provided token was invalid",
+		).to_dict(), 401
+
 	serverService.reset_timeout()
+
 	return {"resetTimeout":"resetTimeout"}, 200
 
 @app.route("/server/<game>/start", methods=["POST"])
@@ -117,6 +126,15 @@ def stop():
 
 @app.route("/servers", methods=["GET"])
 def list_servers():
+	auth = request.headers.get("Authorization")
+	valid = Security.validateToken(auth)
+
+	if(not valid):
+		return Error(
+			message="Unauthorized",
+			details="Provided token was invalid",
+		).to_dict(), 401
+
 	new_dict = {}
 
 	# get the games
