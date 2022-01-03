@@ -28,12 +28,13 @@ class ProcessHandler(Thread):
 		self.stoping_event : Event = Event()
 		self.timeout_timer = None
 
+		# Events
 		self.on_ready_events = []
 		self.on_exit_events = []
 		self.on_reminder_events = []
-		self.on_start_timeout = []
+		self.on_start_timeout_events = []
 		self.on_ready_events.append(self.reset_server_timeout) # starts the timeout to kill the server
-		self.on_start_timeout.append(self.stop) # tries to stops the server
+		self.on_start_timeout_events.append(self.stop) # tries to stops the server
 
 	def run(self):
 		self.proc = subprocess.Popen(
@@ -117,7 +118,7 @@ class ProcessHandler(Thread):
 
 	def _on_start_timeout(self):
 		logger.info("Calling on_start_timeout")
-		for event in self.on_start_timeout:
+		for event in self.on_start_timeout_events:
 			event()
 
 	def _on_ready(self):

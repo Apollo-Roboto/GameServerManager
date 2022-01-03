@@ -3,3 +3,4 @@ from .RequestResult import RequestResult
 from .RequestReveived import RequestReceived
 from .Status import Status
 from .Game import Game
+from .WebhookData import WebhookData
