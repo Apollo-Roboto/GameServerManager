@@ -63,7 +63,7 @@ class ServerService:
 			self._thread.on_ready_events.append(lambda : Webhook.send(callback_url, WebhookData("Server has started.")))
 			self._thread.on_exit_events.append(lambda : Webhook.send(callback_url, WebhookData("Server has stopped.")))
 			self._thread.on_reminder_events.append(lambda x: Webhook.send(callback_url, WebhookData(f"Reminder, the server will stop in {x} seconds.")))
-			self._thread.on_start_timeout_events.append(lambda : Webhook.send(callback_url, WebhookData("Server failed to start, timeout reached.")))
+			self._thread.timer_start_timeout.events.append(lambda : Webhook.send(callback_url, WebhookData("Server failed to start, timeout reached.")))
 
 		self._thread.start()
 
