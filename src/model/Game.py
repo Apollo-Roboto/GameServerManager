@@ -1,26 +1,18 @@
 import logging
+from dataclasses import dataclass
+
 from core import AppConfig
 
 config = AppConfig.getInstance()
 
+@dataclass
 class Game:
-	def __init__(self, name, version, path, command, ready_log, timeout):
-		self.name = name
-		self.version = version
-		self.path = path
-		self.command = command
-		self.ready_log = ready_log
-		self.timeout = timeout
-	
-	def to_dict(self):
-		return {
-			"name": self.name,
-			"version": self.version,
-			"path": self.path,
-			"command": self.command,
-			"ready_log": self.ready_log,
-			"timeout": self.timeout,
-		}
+	name: str
+	version: str
+	path: str
+	command: str
+	ready_log: str
+	timeout: str
 
 	@classmethod
 	def get_game(cls, name, version=None):

@@ -75,6 +75,6 @@ class ServerService:
 
 	def reset_timeout(self):
 		if(self.is_running()):
-			self._thread.reset_timeout()
+			self._thread.reset_server_timeout()
 		else:
 			logger.info("Tried to reset timeout but no thread was running.")

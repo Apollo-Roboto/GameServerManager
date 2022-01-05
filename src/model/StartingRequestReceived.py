@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
 @dataclass
-class RequestResult:
+class StartingRequestReceived:
 	message : str
-	details : str
+	timeout : int

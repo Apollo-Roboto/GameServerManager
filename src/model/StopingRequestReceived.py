@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
 @dataclass
-class Error:
-	message: str
-	details: str
+class StopingRequestReceived:
+	message : str

@@ -7,7 +7,7 @@ from flask import Flask, json, jsonify, request
 from flask.logging import default_handler
 
 from core import AppConfig, Security
-from model import RequestReceived, Error, Status, Game
+from model import StartingRequestReceived, StopingRequestReceived, Error, Game
 from service import ServerService, AlreadyRunningException, NotRunningException
 
 app = Flask(__name__)
@@ -42,7 +42,7 @@ def reset_timeout():
 		return Error(
 			message="Unauthorized",
 			details="Provided token was invalid",
-		).to_dict(), 401
+		).__dict__, 401
 
 	serverService.reset_timeout()
 
@@ -57,7 +57,7 @@ def start(game):
 		return Error(
 			message="Unauthorized",
 			details="Provided token was invalid",
-		).to_dict(), 401
+		).__dict__, 401
 
 	try:
 		game = Game.get_game(
@@ -68,7 +68,7 @@ def start(game):
 		return Error(
 			message="Bad request",
 			details=str(e),
-		).to_dict(), 400
+		).__dict__, 400
 	
 	callback_url = request.headers.get("Callback-Url")
 	
@@ -76,7 +76,7 @@ def start(game):
 		return Error(
 			message="Bad request",
 			details="Invalid Callback-Url",
-		).to_dict(), 400
+		).__dict__, 400
 
 	logger.info(f"Request to start. game: '{game.name}', version: '{game.version}', callback_url: '{callback_url}'")
 
@@ -89,13 +89,12 @@ def start(game):
 		return Error(
 			message="Bad request",
 			details="Game already running",
-		).to_dict(), 400
+		).__dict__, 400
 
-	return RequestReceived(
+	return StartingRequestReceived(
 		message=f"Starting {game.name}, version: {game.version}",
-		status=Status.STARTING,
 		timeout=game.timeout,
-	).to_dict(), 200
+	).__dict__, 200
 
 @app.route("/server/stop", methods=["POST"])
 def stop():
@@ -106,7 +105,7 @@ def stop():
 		return Error(
 			message="Unauthorized",
 			details="Provided token was invalid",
-		).to_dict(), 401
+		).__dict__, 401
 
 	logger.info(f"Request to stop...")
 
@@ -116,13 +115,11 @@ def stop():
 		return Error(
 			message="Bad request",
 			details="No game is running",
-		).to_dict(), 400
+		).__dict__, 400
 
-	return RequestReceived(
+	return StopingRequestReceived(
 		message=f"Stopping",
-		status=Status.RUNNING,
-		timeout=None,
-	).to_dict(), 200
+	).__dict__, 200
 
 @app.route("/servers", methods=["GET"])
 def list_servers():
@@ -133,7 +130,7 @@ def list_servers():
 		return Error(
 			message="Unauthorized",
 			details="Provided token was invalid",
-		).to_dict(), 401
+		).__dict__, 401
 
 	new_dict = {}
 
