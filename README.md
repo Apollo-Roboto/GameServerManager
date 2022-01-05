@@ -12,28 +12,28 @@ This REST application allows you to setup multiple game server in a config file 
 	- On start
 	- On stop
 	- On about to shutdown aka reminder
-- Organized games by versions for multiple
+- Organized games by versions
 
 *Limited to run one server at a time.*
 
 # Example request
 
-Start:
+**Start:**
 ```bash
 curl --request POST \
   --url http://localhost:25575/server/<gameHere>/start \
   --header 'Authorization: Bearer <tokenHere>' \
-  --header 'Callback-Url: http://www.your-domain.com:25575/webhook'
+  --header 'Callback-Url: http://www.your-domain.com:8080/webhook'
 ```
 
-Stop:
+**Stop:**
 ```bash
 curl --request POST \
   --url http://localhost:25575/server/stop \
   --header 'Authorization: Bearer <tokenHere>'
 ```
 
-Reset timeout:
+**Reset timeout:**
 ```
 curl --request POST \
   --url http://localhost:25575/server/resetTimeout \

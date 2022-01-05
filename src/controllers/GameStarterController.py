@@ -22,12 +22,6 @@ logger = logging.getLogger(__name__)
 config = AppConfig.getInstance()
 serverService = ServerService.getInstance()
 
-@app.route("/webhook", methods=["POST"])
-def webhooktest():
-	logger.info("########################### W E B H O O K ###########################")
-	logger.info(request.data)
-	return {"msg":"received"}, 200
-
 @app.route("/server/ping", methods=["GET"])
 def ping():
 	logger.info("ping")
