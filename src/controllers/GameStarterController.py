@@ -38,7 +38,13 @@ def reset_timeout():
 			details="Provided token was invalid",
 		).__dict__, 401
 
-	serverService.reset_timeout()
+	try:
+		serverService.reset_timeout()
+	except NotRunningException as e:
+		return Error(
+			message="Bad request",
+			details="No game is running",
+		).__dict__, 400
 
 	return {"resetTimeout":"resetTimeout"}, 200
 
@@ -112,7 +118,7 @@ def stop():
 
 	try:
 		serverService.stop()
-	except NotRunningException as e:
+	except NotRunningException:
 		return Error(
 			message="Bad request",
 			details="No game is running",
