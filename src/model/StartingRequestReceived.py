@@ -2,5 +2,6 @@ from dataclasses import dataclass
 
 @dataclass
 class StartingRequestReceived:
-	message : str
+	game : str
+	version : str
 	timeout : int

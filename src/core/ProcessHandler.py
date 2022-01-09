@@ -72,6 +72,7 @@ class ProcessHandler(Thread):
 				logger.info("Stopped listening for readyLog")
 
 		self.timer_reminder.cancel()
+		self.timer_start_timeout.cancel()
 		logger.info("Waiting for process to stop...")
 		self.proc.wait()
 		logger.info(f"Process done with exit code {self.proc.poll()}")

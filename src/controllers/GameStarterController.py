@@ -42,8 +42,8 @@ def reset_timeout():
 
 	return {"resetTimeout":"resetTimeout"}, 200
 
-@app.route("/server/<game>/start", methods=["POST"])
-def start(game):
+@app.route("/server/start", methods=["POST"])
+def start():
 	auth = request.headers.get("Authorization")
 	valid = Security.validateToken(auth)
 
@@ -52,10 +52,16 @@ def start(game):
 			message="Unauthorized",
 			details="Provided token was invalid",
 		).__dict__, 401
+	
+	if("game" not in request.args):
+		return Error(
+			message="Bad request",
+			details="The parameter 'game' is required.",
+		).__dict__, 400
 
 	try:
 		game = Game.get_game(
-			name=game,
+			name=request.args.get("game"),
 			version=request.args.get("version"),
 		)
 	except ValueError as e:
@@ -86,7 +92,8 @@ def start(game):
 		).__dict__, 400
 
 	return StartingRequestReceived(
-		message=f"Starting {game.name}, version: {game.version}",
+		game=game.name,
+		version=game.version,
 		timeout=game.timeout,
 	).__dict__, 200
 
