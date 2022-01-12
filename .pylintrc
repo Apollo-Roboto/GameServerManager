@@ -1,0 +1,5 @@
+[PYLINT]
+indent-string='\t'
+
+[MESSAGES CONTROL]
+disable=C, W1203

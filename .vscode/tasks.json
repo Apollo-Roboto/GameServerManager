@@ -1,0 +1,39 @@
+{
+	"version":"2.0.0",
+	"tasks": [
+		{
+			"label": "Flask Main",
+			"type": "shell",
+			"command": "python",
+			"args": [".\\src\\main.py"],
+			"options": {
+				"cwd": "${workspaceFolder}",
+			},
+			"presentation": {
+				"echo": true,
+				"focus": true,
+				"panel": "shared",
+				"clear": true
+			},
+			"group": "build"
+		},
+		{
+			"label": "Flask Generate Token",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				".\\src\\main.py",
+				"generatetoken"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}",
+			},
+			"presentation": {
+				"echo": true,
+				"focus": true,
+				"panel": "shared",
+				"clear": true
+			}
+		}
+	]
+}

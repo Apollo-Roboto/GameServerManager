@@ -1,4 +1,4 @@
 Flask==2.0.1
-mcstatus==6.4.0
 gevent==21.1.2
 Flask-Compress==1.10.1
+validators==0.18.2
