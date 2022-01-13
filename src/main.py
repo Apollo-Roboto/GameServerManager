@@ -8,7 +8,7 @@ from gevent.pywsgi import WSGIServer
 
 from core import AppConfig, Security
 # from API import app
-from controllers.Minecraft import app
+from controllers.GameStarterController import app
 
 logger = logging.getLogger(__name__)
 config = AppConfig.getInstance()
@@ -24,13 +24,15 @@ if(__name__ == '__main__'):
 			logger.info("Unknown argument")
 			
 	else:
-		logger.info("Starting flask server...")
-		http_server = WSGIServer((config.flaskHost, config.flaskPort), app)
-		logger.info(f"Listening on {config.flaskHost}:{config.flaskPort}")
-		http_server.serve_forever()
+		if(config.flaskDebug):
+			app.run(
+				debug=True,
+				host=config.flaskHost,
+				port=config.flaskPort
+			)
+		else:
+			logger.info("Starting flask server...")
+			http_server = WSGIServer((config.flaskHost, config.flaskPort), app)
+			logger.info(f"Listening on {config.flaskHost}:{config.flaskPort}")
+			http_server.serve_forever()
 
-		# app.run(
-		# 	debug=True,
-		# 	host=config.flaskHost,
-		# 	port=config.flaskPort
-		# )

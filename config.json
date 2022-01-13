@@ -1,8 +1,36 @@
 {
-	"minecraftServerHost": "localhost",
-	"minecraftServerPort": "25565",
-	"minecraftServerPath": ".",
-	"minecraftServerCommand": "echo hello",
+	"$schema": "./schemas/ConfigSchema.json",
+	
 	"flaskPort": 25575,
-	"flaskHost": "0.0.0.0"
+	"flaskHost": "0.0.0.0",
+	"flaskDebug": false,
+
+	"serverTimeout": 30,
+	"reminderTime": 15,
+
+	"games": {
+		"Minecraft": {
+			"default": "1.16.5",
+			"versions": {
+				"1.16.5":{
+					"path": "~/Minecraft/1.16.5/path",
+					"command": "java -jar server.jar",
+					"readyLog": "\\[.+\\] \\[Server thread/INFO\\]: Done \\(.+\\)! For help, type \"help\"",
+					"timeout": 360
+				},
+				"1.18.0":{
+					"path": "~/Minecraft/1.18.0/path",
+					"command": "java -jar server.jar",
+					"readyLog": "\\[.+\\] [Server thread/INFO]: Done \\(.+\\)! For help, type \"help\"",
+					"timeout": 360
+				}
+			}
+		},
+		"Satisfactory": {
+			"path": "~/Satisfactory/path",
+			"command": "./start.sh",
+			"readyLog": "\\[.*\\]\\[  0\\]LogInit: Display: Engine is initialized. Leaving FEngineLoop::Init\\(\\)",
+			"timeout": 360
+		}
+	}
 }
