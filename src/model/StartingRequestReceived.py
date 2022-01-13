@@ -4,4 +4,4 @@ from dataclasses import dataclass
 class StartingRequestReceived:
 	game : str
 	version : str
-	timeout : int
+	server_timeout : int

@@ -100,7 +100,7 @@ def start():
 	return StartingRequestReceived(
 		game=game.name,
 		version=game.version,
-		timeout=game.timeout,
+		server_timeout=config.serverTimeout,
 	).__dict__, 200
 
 @app.route("/server/stop", methods=["POST"])
