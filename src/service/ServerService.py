@@ -60,7 +60,7 @@ class ServerService:
 		
 		# Sets the webhook events if present in the request
 		if(callback_url is not None):
-			self._thread.on_ready_events.append(lambda : Webhook.send(callback_url, WebhookData("Server has started.")))
+			self._thread.on_ready_events.append(lambda : Webhook.send(callback_url, WebhookData("Server is ready.")))
 			self._thread.on_exit_events.append(lambda : Webhook.send(callback_url, WebhookData("Server has stopped.")))
 			self._thread.on_reminder_events.append(lambda x: Webhook.send(callback_url, WebhookData(f"Reminder, the server will stop in {x} seconds.")))
 			self._thread.timer_start_timeout.events.append(lambda : Webhook.send(callback_url, WebhookData("Server failed to start, timeout reached.")))

@@ -7,7 +7,7 @@ from flask import Flask, json, jsonify, request
 from flask.logging import default_handler
 
 from core import AppConfig, Security
-from model import StartingRequestReceived, StopingRequestReceived, Error, Game
+from model import StartingRequestReceived, StopingRequestReceived, Error, Game, ResetTimeoutResponse
 from service import ServerService, AlreadyRunningException, NotRunningException
 
 app = Flask(__name__)
@@ -46,7 +46,9 @@ def reset_timeout():
 			details="No game is running",
 		).__dict__, 400
 
-	return {"resetTimeout":"resetTimeout"}, 200
+	return ResetTimeoutResponse(
+		server_timeout=config.serverTimeout
+	).__dict__, 200
 
 @app.route("/server/start", methods=["POST"])
 def start():
