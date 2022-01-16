@@ -21,7 +21,7 @@ This REST application allows you to setup multiple game server in a config file 
 **Start:**
 ```bash
 curl --request POST \
-  --url http://localhost:25575/server/<gameHere>/start \
+  --url http://localhost:25575/server/start?game=<gameHere>&version=<versionHere> \
   --header 'Authorization: Bearer <tokenHere>' \
   --header 'Callback-Url: http://www.your-domain.com:8080/webhook'
 ```
@@ -34,7 +34,7 @@ curl --request POST \
 ```
 
 **Reset timeout:**
-```
+```bash
 curl --request POST \
   --url http://localhost:25575/server/resetTimeout \
   --header 'Authorization: Bearer <tokenHere>'
