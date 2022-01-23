@@ -1,31 +1,17 @@
 import logging
-import sys
 import validators
 
-from flask_compress import Compress
-from flask import Flask, json, jsonify, request
-from flask.logging import default_handler
+from flask import request
 
+from controllers import app
 from core import AppConfig, Security
 from model import StartingRequestReceived, StopingRequestReceived, Error, Game, ResetTimeoutResponse
 from service import ServerService, AlreadyRunningException, NotRunningException
 
-app = Flask(__name__)
-app.logger.removeHandler(default_handler)
-compress = Compress()
-compress.init_app(app)
-
-handler = logging.StreamHandler(sys.stdout)
-logging.basicConfig(level=logging.INFO, handlers=[handler])
 logger = logging.getLogger(__name__)
 
 config = AppConfig.getInstance()
 serverService = ServerService.getInstance()
-
-@app.route("/server/ping", methods=["GET"])
-def ping():
-	logger.info("ping")
-	return {"msg":"🤖"}, 200
 
 @app.route("/server/resetTimeout", methods=["POST"])
 def reset_timeout():
