@@ -1,4 +1,4 @@
-# REST Server Starter
+# Game Server Manager
 
 Start a game server from a simple rest call!
 
