@@ -13,6 +13,7 @@ class Game:
 	command: str
 	ready_log: str
 	timeout: str
+	enabled: bool
 
 	@classmethod
 	def get_game(cls, name, version=None):
@@ -54,23 +55,22 @@ class Game:
 
 		if(version is not None):
 			path = game_config["versions"][version]["path"]
+			command = game_config["versions"][version]["command"]
+			ready_log = game_config["versions"][version]["readyLog"]
+			timeout = game_config["versions"][version]["timeout"]
+			if("enabled" in game_config["versions"][version]):
+				enabled = game_config["versions"][version]["enabled"]
+			else:
+				enabled = True
 		else:
 			path = game_config["path"]
-
-		if(version is not None):
-			command = game_config["versions"][version]["command"]
-		else:
 			command = game_config["command"]
-
-		if(version is not None):
-			ready_log = game_config["versions"][version]["readyLog"]
-		else:
 			ready_log = game_config["readyLog"]
-
-		if(version is not None):
-			timeout = game_config["versions"][version]["timeout"]
-		else:
 			timeout = game_config["timeout"]
+			if("enabled" in game_config):
+				enabled = game_config["enabled"]
+			else:
+				enabled = True
 
 		return Game(
 			name=name,
@@ -79,4 +79,5 @@ class Game:
 			command=command,
 			ready_log=ready_log,
 			timeout=timeout,
+			enabled=enabled
 		)

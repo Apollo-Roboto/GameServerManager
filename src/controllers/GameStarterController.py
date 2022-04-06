@@ -63,6 +63,12 @@ def start():
 			message="Bad request",
 			details=str(e),
 		).__dict__, 400
+
+	if(not game.enabled):
+		return Error(
+			message="Bad request",
+			details="This game is not enabled.",
+		).__dict__, 400
 	
 	callback_url = request.headers.get("Callback-Url")
 	
@@ -131,6 +137,11 @@ def list_servers():
 
 	# get the games
 	for game_name, game_data in config.games.items():
+
+		# ignore the disabled games
+		if("enabled" in game_data):
+			if(not game_data["enabled"]):
+				continue
 
 		new_dict[game_name] = {}
 
